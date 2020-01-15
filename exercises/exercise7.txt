@@ -1,0 +1,83 @@
+############ Exercise 7 ################
+
+
+Display the fields restaurant_id, name, borough and cuisine for all the documents in  the collection restaurant.
+
+db.getCollection('restaurant').find({},{_id: 1, name:1, borough:1, cuisine:1})
+
+/* 1 */
+{
+    "_id" : ObjectId("5e1f3c64e1a97eab10b5f176"),
+    "borough" : "Bronx",
+    "cuisine" : "Bakery",
+    "name" : "Morris Park Bake Shop"
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("5e1f3c64e1a97eab10b5f179"),
+    "borough" : "Brooklyn",
+    "cuisine" : "Hamburgers",
+    "name" : "Wendy'S"
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("5e1f3c64e1a97eab10b5f17c"),
+    "borough" : "Manhattan",
+    "cuisine" : "Irish",
+    "name" : "Dj Reynolds Pub And Restaurant"
+}
+
+Display the second group of 5 restaurants which are in the borough Bronx.
+
+db.getCollection('restaurant').find({borough: "Bronx"}, {borough:1}).limit(5).skip(5)
+
+/* 1 */
+{
+    "_id" : ObjectId("5e1f3c64e1a97eab10b5f22d"),
+    "borough" : "Bronx"
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("5e1f3c64e1a97eab10b5f275"),
+    "borough" : "Bronx"
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("5e1f3c64e1a97eab10b5f2bd"),
+    "borough" : "Bronx"
+}
+
+/* 4 */
+{
+    "_id" : ObjectId("5e1f3c64e1a97eab10b5f2f6"),
+    "borough" : "Bronx"
+}
+
+/* 5 */
+{
+    "_id" : ObjectId("5e1f3c64e1a97eab10b5f341"),
+    "borough" : "Bronx"
+}
+
+
+
+==> db.getCollection('restaurant').find({borough: "Bronx"}, {borough:1, name:1}).limit(5).skip(5)
+
+
+Find the restaurants who achieved a score more than 90.
+
+
+Find the restaurants that do not prepare any cuisine of 'American' and their grade  score more than 70 and latitude less than -65.754168.
+
+
+Find the restaurants which belong to the borough Bronx and prepared either  American or Chinese dish.
+
+Find the restaurant Id, name, borough and cuisine for those restaurants which are not  belonging to the borough Staten 
+
+Island or Queens or Bronxor Brooklyn.
+Find the restaurant Id, name, borough and cuisine for those restaurants which  achieved a score which is not more than 10.
+
