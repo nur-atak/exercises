@@ -1,0 +1,16 @@
+UNF 	hospital(DrugNo, Name, Description, Dosage, Method of admin, Units per Day, Start Date, Finish Date)
+
+1NF	hospital(PatientNo, PatientName, BedNo, WardNo, DrugNo, DrugName, Description, Dosage, MethodAdmin, Units, StartDate, FinishDate)
+
+2NF 	hospital(WardName, WardNo)
+	patients(patientNo, patientName, bedNo)
+	drugs(DrugNo, DrugName, Description, Dosage, MethodAdmin, PatientNo, DrugNo, StartDate, FinishDate)
+	
+
+3NF	hospital(WardName, WardNo)
+	patients(patientNo, patientName, bedNo)
+	drugs(DrugNo, DrugName, Description, Dosage, MethodAdmin)
+	treatment(treatmentNo, PatientNo, DrugNo, StartDate, FinishDate)
+
+BCNF	
+
