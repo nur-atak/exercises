@@ -1,0 +1,186 @@
+Exercise 6
+•Create a new database called college
+•Create tables and insert data based on college.sql
+•Make sure you have sufficient right on this database
+•Execute following queries and save both your query and the results in a file called exercise6.txt and add this file to your repository.
+•Retrieve the name, city and grade point average (GPA) of students, greater than or equal to 3.7
+•List the name and hiring date of faculty hired in 1999 or 2000
+•List the offer number, course number and faculty Social Security number for course 
+offerings scheduled in fall 2005 or winter 2006
+•List the offering number, course number, days and time of offerings containing the words'database'or'programming' in the course description and taught in spring 2006.
+
+mysql> select OfferNo, o.CourseNo, OffDays, OffTime, crsDesc, OffTerm from offering o join course c on o.CourseNo=c.CourseNo where (crsDesc like "%database%" or crsDesc like "%programming%") and OffYear="2006" and OffTerm = "SPRING" ;
++---------+----------+---------+----------+--------------------------------------+---------+
+| OfferNo | CourseNo | OffDays | OffTime  | crsDesc                              | OffTerm |
++---------+----------+---------+----------+--------------------------------------+---------+
+|    3333 | IS320    | MW      | 08:30:00 | FUNDAMENTALS OF BUSINESS PROGRAMMING | SPRING  |
+|    5679 | IS480    | TTH     | 15:30:00 | FUNDAMENTALS OF DATABASE MANAGEMENT  | SPRING  |
++---------+----------+---------+----------+--------------------------------------+---------+
+2 rows in set (0.00 sec)
+
+
+•List the offer number, course number and name of the instructor of IS course offerings scheduled in fall 2005 taught by assistant professors
+
+mysql> select OfferNo, CourseNo, FacFirstName, FacLastName from offering o join faculty f on o.FacSSN=f.FacSSN where CourseNo like "IS%" and OffTerm = "FALL" and OffYear = "2005" and FacRank = "ASST";
++---------+----------+--------------+-------------+
+| OfferNo | CourseNo | FacFirstName | FacLastName |
++---------+----------+--------------+-------------+
+|    1234 | IS320    | LEONARD      | VINCE       |
+|    4321 | IS320    | LEONARD      | VINCE       |
++---------+----------+--------------+-------------+
+2 rows in set (0.00 sec)
+
+
+•Summarize the averageGPA of students by major.
+
+mysql> select avg(stdGPA), stdMajor from student group by stdMajor;
++-------------+----------+
+| avg(stdGPA) | stdMajor |
++-------------+----------+
+|    3.233333 | IS       |
+|    2.800000 | FIN      |
+|    3.400000 | ACCT     |
++-------------+----------+
+3 rows in set (0.00 sec)
+
+•Summarize the number of offerings and unique courses by year.
+
+mysql> select count(distinct CourseNo), count(OfferNO), OffYear from offering group by OffYear;
++--------------------------+----------------+---------+
+| count(distinct CourseNo) | count(OfferNO) | OffYear |
++--------------------------+----------------+---------+
+|                        2 |              3 |    2005 |
+|                        6 |             10 |    2006 |
++--------------------------+----------------+---------+
+2 rows in set (0.00 sec)
+
+
+•Summarize the average GPA of upper-division (junior or senior) students by major. Only list the major with average GPA greater than 3.1.
+
+mysql> select avg(stdGPA) average_GPA, stdMajor from student where stdClass = "JR" or stdClass = "SR"  group by stdMajor having average_GPA > 3.1;
++-------------+----------+
+| average_GPA | stdMajor |
++-------------+----------+
+|    3.500000 | ACCT     |
+|    3.150000 | IS       |
++-------------+----------+
+2 rows in set (0.00 sec)
+
+•Summarize the minimum and maximum GPA of students by major and class.
+
+mysql> select min(stdGPA), max(stdGPA), stdMajor, stdClass from student group by stdMajor, stdClass;
++-------------+-------------+----------+----------+
+| min(stdGPA) | max(stdGPA) | stdMajor | stdClass |
++-------------+-------------+----------+----------+
+|        3.00 |        3.00 | IS       | FR       |
+|        2.50 |        2.70 | FIN      | JR       |
+|        3.50 |        3.50 | ACCT     | JR       |
+|        2.20 |        4.00 | IS       | SR       |
+|        3.20 |        3.20 | FIN      | SR       |
+|        3.60 |        3.60 | IS       | JR       |
+|        3.30 |        3.30 | ACCT     | SO       |
+|        3.80 |        3.80 | IS       | SO       |
++-------------+-------------+----------+----------+
+8 rows in set (0.00 sec)
+
+•Summarize the number of IS course offering by course description.
+
+mysql> select count(CourseNo), crsDesc from course where CourseNo like "IS%" group by crsDesc;
++-----------------+--------------------------------------+
+| count(CourseNo) | crsDesc                              |
++-----------------+--------------------------------------+
+|               1 | FUNDAMENTALS OF BUSINESS PROGRAMMING |
+|               1 | SYSTEMS ANALYSIS                     |
+|               1 | BUSINESS DATA COMMUNICATIONS         |
+|               1 | FUNDAMENTALS OF DATABASE MANAGEMENT  |
++-----------------+--------------------------------------+
+4 rows in set (0.01 sec)
+
+mysql> select count(OfferNo), crsDesc from offering o join course c on o.CourseNo=c.CourseNo where o.CourseNo like "IS%" group by crsDesc;
++----------------+--------------------------------------+
+| count(OfferNo) | crsDesc                              |
++----------------+--------------------------------------+
+|              6 | FUNDAMENTALS OF BUSINESS PROGRAMMING |
+|              2 | SYSTEMS ANALYSIS                     |
+|              2 | FUNDAMENTALS OF DATABASE MANAGEMENT  |
++----------------+--------------------------------------+
+3 rows in set (0.00 sec)
+
+
+•List the GPA, name, city and state of juniors, lowest GPA first.
+
+mysql> select stdGPA, stdFirstName, stdLastName stdCity, stdState from student where stdClass = "JR" order by stdGPA;
++--------+--------------+---------+----------+
+| stdGPA | stdFirstName | stdCity | stdState |
++--------+--------------+---------+----------+
+|   2.50 | ROBERTO      | MORALES | WA       |
+|   2.70 | BOB          | NORBERT | WA       |
+|   3.50 | CANDY        | KENDALL | WA       |
+|   3.60 | MARIAH       | DODGE   | WA       |
++--------+--------------+---------+----------+
+4 rows in set (0.00 sec)
+
+•List the unique city and state combination in the Faculty table.
+
+mysql> select distinct FacCity, FacState from faculty;
++----------+----------+
+| FacCity  | FacState |
++----------+----------+
+| SEATTLE  | WA       |
+| BOTHELL  | WA       |
+| BELLEVUE | WA       |
++----------+----------+
+3 rows in set (0.00 sec)
+
+•List the student name, offering number and grade of students who have a grade >= 3.5 in a course offering.
+
+mysql> select s.stdFirstName, s.stdLastName, e.EnrGrade, s.stdSSN from enrollment e join student s on e.stdSSN=s.stdSSN where e.EnrGrade >= 3.5;
++--------------+-------------+----------+-------------+
+| stdFirstName | stdLastName | EnrGrade | stdSSN      |
++--------------+-------------+----------+-------------+
+| CANDY        | KENDALL     |     3.50 | 234-56-7890 |
+| MARIAH       | DODGE       |     3.80 | 567-89-0123 |
+| HOMER        | WELLS       |     3.50 | 123-45-6789 |
+| ROBERTO      | MORALES     |     3.50 | 789-01-2345 |
+| BOB          | NORBERT     |     3.70 | 124-56-7890 |
+| ROBERTO      | MORALES     |     3.80 | 789-01-2345 |
+| MARIAH       | DODGE       |     3.60 | 567-89-0123 |
+| LUKE         | BRAZZI      |     3.70 | 890-12-3456 |
+| BOB          | NORBERT     |     3.50 | 124-56-7890 |
+| WILLIAM      | PILGRIM     |     4.00 | 901-23-4567 |
++--------------+-------------+----------+-------------+
+10 rows in set (0.00 sec)
+
+
+•List the names of students (without duplicates) who have grades >= 3.5 in a course offering.
+
+mysql> select distinct stdFirstName, stdLastName from student s join enrollment e on s.StdSSN=e.StdSSN where e.EnrGrade >= 3.5;
++--------------+-------------+
+| stdFirstName | stdLastName |
++--------------+-------------+
+| CANDY        | KENDALL     |
+| MARIAH       | DODGE       |
+| HOMER        | WELLS       |
+| ROBERTO      | MORALES     |
+| BOB          | NORBERT     |
+| LUKE         | BRAZZI      |
+| WILLIAM      | PILGRIM     |
++--------------+-------------+
+7 rows in set (0.00 sec)
+
+
+•List Bob Norbert's course schedule in spring 2006. For each course, list the offering number, course number, days, location, time and faculty name.
+
+
+mysql> select o.OfferNo, CourseNo, OffDays, OffLocation, OffTime, FacFirstName, FacLastName from offering o join enrollment e on o.OfferNo=e.OfferNo join student s on e.StdSSN=s.StdSSN join faculty f on o.FacSSN=f.FacSSN where stdFirstName = "Bob" and o.OffTerm = "spring" and OffYear = "2006" ;
++---------+----------+---------+-------------+----------+--------------+-------------+
+| OfferNo | CourseNo | OffDays | OffLocation | OffTime  | FacFirstName | FacLastName |
++---------+----------+---------+-------------+----------+--------------+-------------+
+|    9876 | IS460    | TTH     | BLM307      | 13:30:00 | LEONARD      | FIBON       |
+|    5679 | IS480    | TTH     | BLM412      | 15:30:00 | CRISTOPHER   | COLAN       |
++---------+----------+---------+-------------+----------+--------------+-------------+
+2 rows in set (0.00 sec)
+
+
+
+
