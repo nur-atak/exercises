@@ -1,0 +1,18 @@
+############ EXERCISE 2 #######################
+
+UNF 	dental(staffNo, denistName, patientNo, patientName, appoinment, surgeryNo)
+
+1NF 	dental(staffNo, denistName, patientNo, patientName, appoinmentDate, appoinmentTime, surgeryNo)
+
+2NF 	dental_staff(StaffNo, dentistName)
+	dental_appointment(date, time, appNo, surgeryNo, patientNo, patientName, staffNo, appDate, apptime, surgeyNo)
+	dental_surgery(SurgeryNo, apptime, surgeryNo, surgeryName)
+
+3NF 	dental_staff(StaffNo, DentistName)
+	patients(patientsNo, patientName)
+	appointments(appNo, staffnO, patientNo, surgeryNo)
+	appointID(appNo, appointDate, appTime)
+	surgery(appointDate, surgeryNo, surgeryname, staffNo)
+
+BCNF
+
